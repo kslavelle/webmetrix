@@ -1,7 +1,7 @@
 import { useState } from "react";
 import React from "react";
 
-import SignInUser from "./Auth";
+import {SignInUser} from "./Auth";
 
 const LogIn = (props) => {
 
