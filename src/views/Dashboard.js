@@ -1,6 +1,8 @@
+import React from 'react';
 import firebase from "firebase";
 import "firebase/auth";
 import { Redirect } from "react-router-dom";
+
 
 const CheckLoggedIn = () => {
     if (firebase.auth().currentUser === null) {
@@ -10,6 +12,7 @@ const CheckLoggedIn = () => {
 }
 
 const Dashboard = (props) => {
+
     return (
         <div>
             {CheckLoggedIn()}

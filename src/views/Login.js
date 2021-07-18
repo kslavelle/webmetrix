@@ -2,10 +2,11 @@ import { useState } from "react";
 import React from "react";
 
 import { Redirect } from "react-router";
+import { useHistory } from "react-router-dom";
 import firebase from "firebase";
 import "firebase/auth";
 
-const SignUp = (props) => {
+const LogIn = (props) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -13,10 +14,12 @@ const SignUp = (props) => {
     const [authErrorMessage, setAuthErrorMessage] = useState("");
     const [authState, setAuthState] = useState(false);
 
+    const history = useHistory();
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 setAuthState(true);
                 const user = userCredential.user;
@@ -25,12 +28,18 @@ const SignUp = (props) => {
                 const errorMessage = error.message;
                 setAuthState(false);
                 setAuthErrorMessage(errorMessage);
-            })
+            }
+            )
+        
+    }
+
+    const signUp = (e) => {
+        history.push("/sign-up");
     }
 
     return (
         <form>
-            <h3>Sign Up</h3>
+            <h3>Sign In</h3>
             {authState ?
                 <Redirect to="/dashboard" /> : 
                 <h3>{authErrorMessage}</h3>
@@ -48,9 +57,10 @@ const SignUp = (props) => {
                 onChange={(e) => setPassword(e.target.value)}
             />
 
-            <button onClick={handleSubmit} type="submit" className="btn btn-primary btn-block">Sign Up</button>
+            <button onClick={handleSubmit} type="submit" className="btn btn-primary btn-block">Sign In</button>
+            <button onClick={signUp} className="btn btn-primary btn-block">Sign Up</button>
         </form>
     );
 }
 
-export default SignUp;
+export default LogIn
