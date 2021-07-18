@@ -1,22 +1,42 @@
 import { useState } from "react";
 import React from "react";
 
-import {SignInUser} from "./Auth";
+import { Redirect } from "react-router";
+import firebase from "firebase";
+import "firebase/auth";
 
 const LogIn = (props) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [authErrorMessage, setAuthErrorMessage] = useState("");
+    const [authState, setAuthState] = useState(false);
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                setAuthState(true);
+                const user = userCredential.user;
+            })
+            .catch((error) => {
+                const errorMessage = error.message;
+                setAuthState(false);
+                setAuthErrorMessage(errorMessage);
+            }
+            )
         
-        SignInUser(email, password);
     }
 
     return (
         <form>
             <h3>Sign In</h3>
+            {authState ?
+                <Redirect to="/dashboard" /> : 
+                <h3>{authErrorMessage}</h3>
+            }
             <input
                 type="email"
                 className="form-control"
